@@ -56,6 +56,12 @@
       font-weight: 600;
       margin-bottom: 5px;
       display: inline-block;
+      transition: color 0.3s ease;
+    }
+
+    /* Error label styling */
+    .label-error {
+      color: #d9534f; /* red color for error labels */
     }
 
     /* Inputs, selects, textareas */
@@ -76,6 +82,23 @@
     select:focus {
       border-color: #007bff;
       outline: none;
+    }
+
+    /* Error highlighting on inputs */
+    .input-error {
+      border-color: #d9534f !important; /* A subtle red color */
+    }
+
+    /* Inline error messages */
+    .inline-error {
+      background-color: #ffecec;
+      border: 1px solid #d9534f;
+      color: #d9534f;
+      padding: 8px;
+      margin-top: 5px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+      line-height: 1.4;
     }
 
     /* Submit button */
@@ -119,25 +142,34 @@
 <body>
 
   <div class="container">
-    <h2>Create Your Advocacy Kit</h2>
+    <h2>Create Your Wisconsin Advocacy Kit</h2>
     <p class="intro-text">
-      Please fill in your details. We'll use your <strong>personal address</strong> to look up your
+      Please fill in your details. We'll use your <strong>Wisconsin Street Address</strong> to look up your
       representatives, and the rest of the fields will personalize your letters/emails.
     </p>
+   
 
     <!-- IMPORTANT: The form directly posts to your backend -->
-    <form action="https://streaming1-a0f6be3ac16e.herokuapp.com/createAdvocacyKit" method="POST">
+    <form
+      action="https://streaming1-a0f6be3ac16e.herokuapp.com/createAdvocacyKit"
+      method="POST"
+      onsubmit="return validateForm()"
+    >
+      <!-- PERSONAL ADDRESS -->
       <div>
-        <label for="address">Personal Address</label>
+        <label for="address" id="addressLabel">Wisconsin Street Address</label>
         <input
           type="text"
           id="address"
           name="address"
-          placeholder="123 Main St, City, State ZIP"
+          placeholder="123 Main St, City, ST 12345"
           required
         />
+        <!-- Space for inline error messages -->
+        <div id="addressError" class="inline-error" style="display: none;"></div>
       </div>
 
+      <!-- NAME -->
       <div>
         <label for="name">Your Full Name</label>
         <input
@@ -149,6 +181,7 @@
         />
       </div>
 
+      <!-- BUSINESS TITLE -->
       <div>
         <label for="businessTitle">Business Title</label>
         <input
@@ -160,6 +193,7 @@
         />
       </div>
 
+      <!-- BUSINESS NAME -->
       <div>
         <label for="businessName">Business Name</label>
         <input
@@ -170,17 +204,31 @@
         />
       </div>
 
+      <!-- BUSINESS MAILING ADDRESS -->
       <div>
-        <label for="mailingAddress">Business Mailing Address</label>
+        <label for="mailingAddress" id="mailingAddressLabel">Business Mailing Address</label>
         <input
           type="text"
           id="mailingAddress"
           name="agentInfo[mailingAddress]"
-          placeholder="123 Main St"
+          placeholder="123 Main St, City, ST 12345"
           required
         />
+        <!-- CHECKBOX FOR SAME ADDRESS -->
+        <div style="margin-top: 8px;">
+          <input
+            type="checkbox"
+            id="sameAddressCheckbox"
+            name="sameAddressCheckbox"
+            onclick="toggleSameAddress()"
+          />
+          <label for="sameAddressCheckbox">Same as Personal Address</label>
+        </div>
+        <!-- Space for inline error messages -->
+        <div id="mailingAddressError" class="inline-error" style="display: none;"></div>
       </div>
 
+      <!-- EMAIL -->
       <div>
         <label for="email">Email</label>
         <input
@@ -192,6 +240,7 @@
         />
       </div>
 
+      <!-- PHONE -->
       <div>
         <label for="phone">Phone</label>
         <input
@@ -203,6 +252,7 @@
         />
       </div>
 
+      <!-- YEARS IN BUSINESS -->
       <div>
         <label for="yearsInBusiness">Years in Business</label>
         <input
@@ -216,6 +266,7 @@
         />
       </div>
 
+      <!-- HOST AGENCY -->
       <div>
         <label for="yourHostAgency">Host Agency</label>
         <select id="yourHostAgency" name="agentInfo[hostAgency]" required>
@@ -226,6 +277,7 @@
         </select>
       </div>
 
+      <!-- PERSONAL STORY -->
       <div>
         <label for="personalStory">
           Explain how double taxation directly affects you and how it makes you feel:
@@ -237,7 +289,8 @@
           placeholder="(Optional) Provide a short description..."
         ></textarea>
       </div>
-
+      <p class="intro-text" style="color: red; margin-top: 0;">Only for use by Wisconsin based travel agents!</p>
+      <!-- SUBMIT -->
       <button type="submit">Generate My Advocacy Kit</button>
     </form>
     
@@ -245,5 +298,189 @@
       <!-- Optional footer text or links can go here -->
     </div>
   </div>
+
+  <script>
+    // Regex for capturing groups: street, city, state, zip
+    const addressRegex =
+      /^(?<street>[^,]+),\s*(?<city>[^,]+),\s*(?<state>[A-Za-z]{2})\s+(?<zip>\d{5})$/;
+
+    // Toggle checkbox for same address
+    function toggleSameAddress() {
+      const personalAddress = document.getElementById('address');
+      const businessAddress = document.getElementById('mailingAddress');
+      const sameAddressCheck = document.getElementById('sameAddressCheckbox');
+
+      if (sameAddressCheck.checked) {
+        // Copy current personal address
+        businessAddress.value = personalAddress.value;
+        // Disable the field so user can't type into it
+        businessAddress.disabled = true;
+        // Watch for changes on personal address and sync them
+        personalAddress.addEventListener('input', syncAddresses);
+      } else {
+        // Uncheck scenario
+        personalAddress.removeEventListener('input', syncAddresses);
+        businessAddress.value = '';
+        businessAddress.disabled = false;
+      }
+    }
+
+    // Whenever personal address changes, keep business address in sync
+    function syncAddresses() {
+      const personalAddress = document.getElementById('address');
+      const businessAddress = document.getElementById('mailingAddress');
+      businessAddress.value = personalAddress.value;
+    }
+
+    /*
+      showError(field, label, errorField, errorMessage):
+        - Adds .input-error to the field
+        - Adds .label-error to the label
+        - Shows the inline error message in errorField
+        - Adds an asterisk to label text
+        - scrolls into view
+    */
+    function showError(field, label, errorField, errorMessage) {
+      field.classList.add('input-error');
+      label.classList.add('label-error');
+      // Append an asterisk to the label if not already there
+      if (!label.innerText.endsWith('*')) {
+        label.innerText += ' *';
+      }
+      errorField.style.display = 'block';
+      errorField.innerText = errorMessage;
+    }
+
+    // Clears the error styling/messages if previously set
+    function clearError(field, label, errorField, originalLabelText) {
+      field.classList.remove('input-error');
+      label.classList.remove('label-error');
+      label.innerText = originalLabelText; // revert label text
+      errorField.style.display = 'none';
+      errorField.innerText = '';
+    }
+
+    /*
+      validateAddress(field, labelElem, errorElem, labelText):
+        - Tries to match the field's value against addressRegex.
+        - Returns:
+           * "" (empty string) if valid
+           * An error message if invalid
+        - No more final "alert" pop-ups, everything is inline now.
+    */
+    function validateAddress(field, labelElem, errorElem, labelText) {
+      const value = field.value.trim();
+      const match = value.match(addressRegex);
+
+      if (!match) {
+        // Figure out specifics for the user-friendly message
+        let errorMsg = `The ${labelText} is missing or invalid. \n\n`;
+
+        const commaCount = (value.match(/,/g) || []).length;
+        if (commaCount < 2) {
+          errorMsg +=
+            "- We need a street, city, and state separated by commas.\n";
+        }
+        if (!/\d{5}$/.test(value)) {
+          errorMsg += "- A 5-digit ZIP code is missing or incorrect.\n";
+        }
+        errorMsg += "\nExample: 123 Main St, City, ST 12345";
+
+        return errorMsg;
+      }
+
+      // If matched, let's confirm the capturing groups individually
+      const { street, city, state, zip } = match.groups;
+      const subErrors = [];
+      if (!street) subErrors.push("Street portion before the first comma is missing.");
+      if (!city) subErrors.push("City portion between commas is missing.");
+      if (!state) subErrors.push("State (two-letter code) is missing.");
+      if (!zip) subErrors.push("ZIP code (5 digits) is missing.");
+
+      if (subErrors.length > 0) {
+        return `Problems with the ${labelText}:\n- ${subErrors.join("\n- ")}`;
+      }
+
+      return "";
+    }
+
+    // Main form submission validation
+    function validateForm() {
+      const personalAddressField = document.getElementById('address');
+      const personalAddressLabel = document.getElementById('addressLabel');
+      const personalAddressError = document.getElementById('addressError');
+      const personalLabelText = "Personal Address";
+
+      const businessAddressField = document.getElementById('mailingAddress');
+      const businessAddressLabel = document.getElementById('mailingAddressLabel');
+      const businessAddressError = document.getElementById('mailingAddressError');
+      const businessLabelText = "Business Mailing Address";
+
+      // Clear old errors first
+      clearError(personalAddressField, personalAddressLabel, personalAddressError, personalLabelText);
+      clearError(businessAddressField, businessAddressLabel, businessAddressError, businessLabelText);
+
+      // Check personal address
+      let personalErrorMsg = validateAddress(
+        personalAddressField,
+        personalAddressLabel,
+        personalAddressError,
+        personalLabelText
+      );
+
+      // If business address is disabled, it has the same text as personal
+      // so if personal is invalid, business is effectively invalid too
+      let businessErrorMsg = "";
+      if (businessAddressField.disabled) {
+        // Reuse the personal error if personal was invalid
+        businessErrorMsg = personalErrorMsg
+          ? "Because your business address is the same as your personal address, you must fix that address first."
+          : "";
+      } else {
+        // Validate business address normally
+        businessErrorMsg = validateAddress(
+          businessAddressField,
+          businessAddressLabel,
+          businessAddressError,
+          businessLabelText
+        );
+      }
+
+      // Now decide how to display errors
+      const firstErrorField = personalErrorMsg
+        ? personalAddressField
+        : businessErrorMsg
+          ? businessAddressField
+          : null;
+
+      if (personalErrorMsg) {
+        showError(
+          personalAddressField,
+          personalAddressLabel,
+          personalAddressError,
+          personalErrorMsg
+        );
+      }
+      if (businessErrorMsg) {
+        showError(
+          businessAddressField,
+          businessAddressLabel,
+          businessAddressError,
+          businessErrorMsg
+        );
+      }
+
+      // If there's an error, scroll to the first invalid field
+      if (firstErrorField) {
+        firstErrorField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        // also focus for convenience
+        firstErrorField.focus();
+        return false; // prevent submission
+      }
+
+      // Otherwise, all good
+      return true;
+    }
+  </script>
 </body>
 </html>
