@@ -162,7 +162,7 @@
           type="text"
           id="address"
           name="address"
-          placeholder="123 Main St, City, ST 12345"
+          placeholder="123 Park St, Wausau, WI 54401"
           required
         />
         <!-- Space for inline error messages -->
@@ -369,40 +369,40 @@
         - No more final "alert" pop-ups, everything is inline now.
     */
     function validateAddress(field, labelElem, errorElem, labelText) {
-      const value = field.value.trim();
-      const match = value.match(addressRegex);
+  const value = field.value.trim();
+  const match = value.match(addressRegex);
 
-      if (!match) {
-        // Figure out specifics for the user-friendly message
-        let errorMsg = `The ${labelText} is missing or invalid. \n\n`;
+  const subErrors = [];
 
-        const commaCount = (value.match(/,/g) || []).length;
-        if (commaCount < 2) {
-          errorMsg +=
-            "- We need a street, city, and state separated by commas.\n";
-        }
-        if (!/\d{5}$/.test(value)) {
-          errorMsg += "- A 5-digit ZIP code is missing or incorrect.\n";
-        }
-        errorMsg += "\nExample: 123 Main St, City, ST 12345";
-
-        return errorMsg;
-      }
-
-      // If matched, let's confirm the capturing groups individually
-      const { street, city, state, zip } = match.groups;
-      const subErrors = [];
-      if (!street) subErrors.push("Street portion before the first comma is missing.");
-      if (!city) subErrors.push("City portion between commas is missing.");
-      if (!state) subErrors.push("State (two-letter code) is missing.");
-      if (!zip) subErrors.push("ZIP code (5 digits) is missing.");
-
-      if (subErrors.length > 0) {
-        return `Problems with the ${labelText}:\n- ${subErrors.join("\n- ")}`;
-      }
-
-      return "";
+  // Validate structure of the address
+  if (!match) {
+    subErrors.push("Ensure the address includes street, city, state (WI), and ZIP code.");
+    if ((value.match(/,/g) || []).length < 2) {
+      subErrors.push("Address must have commas separating street, city, and state.");
     }
+    if (!/\d{5}$/.test(value)) {
+      subErrors.push("A 5-digit ZIP code is required.");
+    }
+  } else {
+    const { street, city, state, zip } = match.groups;
+    if (!street) subErrors.push("Street is missing.");
+    if (!city) subErrors.push("City is missing.");
+    if (!state) subErrors.push("State code (e.g., WI) is missing.");
+    if (!zip) subErrors.push("ZIP code (5 digits) is missing.");
+    if (state !== "WI") subErrors.push("The state must be Wisconsin (WI) to participate.");
+  
+  }
+
+  
+
+  // If there are errors, return detailed message
+  if (subErrors.length > 0) {
+    return `Issues with ${labelText}:\n- ${subErrors.join("\n- ")}`;
+  }
+
+  return ""; // Address is valid
+}
+
 
     // Main form submission validation
     function validateForm() {
