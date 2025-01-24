@@ -147,14 +147,9 @@
       Please fill in your details. We'll use your <strong>Wisconsin Street Address</strong> to look up your
       representatives, and the rest of the fields will personalize your letters/emails.
     </p>
-   
 
-    <!-- IMPORTANT: The form directly posts to your backend -->
-    <form
-      action="https://streaming1-a0f6be3ac16e.herokuapp.com/createAdvocacyKit"
-      method="POST"
-      onsubmit="return validateForm()"
-    >
+    <!-- We remove the traditional form action/method and replace with a custom onsubmit handler -->
+    <form onsubmit="handleFormSubmission(event)">
       <!-- PERSONAL ADDRESS -->
       <div>
         <label for="address" id="addressLabel">Wisconsin Street Address</label>
@@ -281,9 +276,7 @@
 
       <!-- PERSONAL STORY -->
       <div>
-        <label for="personalStory">
-          Personal Impact Statement
-        </label>
+        <label for="personalStory">Personal Impact Statement</label>
         <textarea
           id="personalStory"
           name="agentInfo[personalStory]"
@@ -291,11 +284,13 @@
           placeholder="(Optional)"
         ></textarea>
       </div>
+
       <p class="intro-text" style="color: red; margin-top: 0;">Only for use by Wisconsin based travel agents!</p>
+
       <!-- SUBMIT -->
       <button type="submit">Generate My Advocacy Kit</button>
     </form>
-    
+
     <div class="footer">
       <!-- Optional footer text or links can go here -->
     </div>
@@ -371,47 +366,43 @@
         - No more final "alert" pop-ups, everything is inline now.
     */
     function validateAddress(field, labelElem, errorElem, labelText) {
-  const value = field.value.trim();
-  const match = value.match(addressRegex);
+      const value = field.value.trim();
+      const match = value.match(addressRegex);
 
-  const subErrors = [];
+      const subErrors = [];
 
-  // Validate structure of the address
-  if (!match) {
-    subErrors.push("Ensure the address includes street, city, state (WI), and ZIP code.");
-    if ((value.match(/,/g) || []).length < 2) {
-      subErrors.push("Address must have commas separating street, city, and state.");
+      // Validate structure of the address
+      if (!match) {
+        subErrors.push("Ensure the address includes street, city, state (WI), and ZIP code.");
+        if ((value.match(/,/g) || []).length < 2) {
+          subErrors.push("Address must have commas separating street, city, and state.");
+        }
+        if (!/\d{5}$/.test(value)) {
+          subErrors.push("A 5-digit ZIP code is required.");
+        }
+      } else {
+        const { street, city, state, zip } = match.groups;
+        if (!street) subErrors.push("Street is missing.");
+        if (!city) subErrors.push("City is missing.");
+        if (!state) subErrors.push("State code (e.g., WI) is missing.");
+        if (!zip) subErrors.push("ZIP code (5 digits) is missing.");
+        if (state !== "WI") subErrors.push("The state must be Wisconsin (WI) to participate.");
+      }
+
+      // If there are errors, return detailed message
+      if (subErrors.length > 0) {
+        return `Issues with ${labelText}:\n- ${subErrors.join("\n- ")}`;
+      }
+
+      return ""; // Address is valid
     }
-    if (!/\d{5}$/.test(value)) {
-      subErrors.push("A 5-digit ZIP code is required.");
-    }
-  } else {
-    const { street, city, state, zip } = match.groups;
-    if (!street) subErrors.push("Street is missing.");
-    if (!city) subErrors.push("City is missing.");
-    if (!state) subErrors.push("State code (e.g., WI) is missing.");
-    if (!zip) subErrors.push("ZIP code (5 digits) is missing.");
-    if (state !== "WI") subErrors.push("The state must be Wisconsin (WI) to participate.");
-  
-  }
 
-  
-
-  // If there are errors, return detailed message
-  if (subErrors.length > 0) {
-    return `Issues with ${labelText}:\n- ${subErrors.join("\n- ")}`;
-  }
-
-  return ""; // Address is valid
-}
-
-
-    // Main form submission validation
+    // Main validation function
     function validateForm() {
       const personalAddressField = document.getElementById('address');
       const personalAddressLabel = document.getElementById('addressLabel');
       const personalAddressError = document.getElementById('addressError');
-      const personalLabelText = "Personal Address";
+      const personalLabelText = "Wisconsin Street Address";
 
       const businessAddressField = document.getElementById('mailingAddress');
       const businessAddressLabel = document.getElementById('mailingAddressLabel');
@@ -434,7 +425,6 @@
       // so if personal is invalid, business is effectively invalid too
       let businessErrorMsg = "";
       if (businessAddressField.disabled) {
-        // Reuse the personal error if personal was invalid
         businessErrorMsg = personalErrorMsg
           ? "Because your business address is the same as your personal address, you must fix that address first."
           : "";
@@ -448,7 +438,7 @@
         );
       }
 
-      // Now decide how to display errors
+      // Decide how to display errors
       const firstErrorField = personalErrorMsg
         ? personalAddressField
         : businessErrorMsg
@@ -480,8 +470,75 @@
         return false; // prevent submission
       }
 
-      // Otherwise, all good
       return true;
+    }
+
+    // Handle form submission via fetch
+    async function handleFormSubmission(event) {
+      event.preventDefault(); // Prevent traditional form post
+
+      // Validate first
+      if (!validateForm()) {
+        return false;
+      }
+
+      // Construct data as JSON
+      const data = {
+        address: document.getElementById('address').value.trim(),
+        agentInfo: {
+          name: document.getElementById('name').value.trim(),
+          businessTitle: document.getElementById('businessTitle').value.trim(),
+          businessName: document.getElementById('businessName').value.trim(),
+          mailingAddress: document.getElementById('mailingAddress').value.trim(),
+          email: document.getElementById('email').value.trim(),
+          phone: document.getElementById('phone').value.trim(),
+          yearsInBusiness: document.getElementById('yearsInBusiness').value.trim(),
+          hostAgency: document.getElementById('yourHostAgency').value.trim(),
+          personalStory: document.getElementById('personalStory').value.trim()
+        }
+      };
+
+      // Send fetch POST request
+      await fetch('https://streaming1-a0f6be3ac16e.herokuapp.com/createAdvocacyKit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+        .then(async (response) => {
+          if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(errorText || 'Request failed');
+          }
+          // The main success path is a ZIP file, so use blob() or arrayBuffer():
+          const blob = await response.blob();
+
+          // Then, trigger a download in the browser:
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = 'advocacy_package.zip';
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          URL.revokeObjectURL(url);
+
+          // Optionally, redirect or show a success message
+          window.location.href = '/confirmation.html';
+        })
+        .then((result) => {
+          // Handle success - For now just alert or log
+          alert('Your Advocacy Kit has been generated successfully!');
+          console.log('Server response:', result);
+        })
+        .catch((error) => {
+          // Handle error
+          alert('An error occurred: ' + error.message);
+          console.error('Error:', error);
+        });
+
+        // window.location.href = "/confirmation.html"
     }
   </script>
 </body>

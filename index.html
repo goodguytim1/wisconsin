@@ -18,6 +18,14 @@
       background: #f9f9f9;
     }
 
+    @media (max-width: 600px) {
+      .official-card {
+        width: 90%;
+      }
+      .officials-grid {
+        gap: 10px;
+      }
+    }
     /* Hero section styling */
     .hero {
       background: #333;
@@ -27,10 +35,11 @@
     }
     .hero h1 {
       margin-bottom: 15px;
-      font-size: 2.5rem;
+      font-size: 3rem;
+      font-weight: bold;
     }
     .hero p {
-      font-size: 1.2rem;
+      font-size: 1.5rem;
       margin-bottom: 30px;
       max-width: 600px;
       margin: 0 auto 30px auto;
@@ -44,9 +53,18 @@
       border-radius: 4px;
       font-weight: bold;
       transition: background 0.3s ease;
+      background: linear-gradient(90deg, #007BFF, #0056b3);
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
-    .hero .cta-btn:hover {
+    .hero {
+      /* background: #0056b3; */
+      background: linear-gradient(90deg, #333, #555);
+    }
+    .cta-btn:hover {
       background: #0056b3;
+      color: #fff;
+      transform: scale(1.05);
+      transition: all 0.3s ease;
     }
 
     /* Main container */
@@ -74,6 +92,7 @@
     }
     .container h3 {
       margin-top: 25px;
+      
     }
 
     /* Meet Your Officials Section */
@@ -103,6 +122,13 @@
       align-items: center;
       flex-direction: column;
     }
+    
+    .official-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
     .official-card img {
       width: 100%;
       height: auto;
@@ -158,6 +184,12 @@
       cursor: pointer;
     }
 
+    hr {
+      border: 0;
+      height: 2px;
+      background: #007BFF;
+      margin: 20px 0;
+    }
   </style>
 </head>
 <body>
@@ -172,6 +204,7 @@
   <!-- Main Content Container -->
   <div class="container">
     <h2>Understanding the Legal / Taxation Issue</h2>
+    <!-- <hr> -->
     <p><strong>Overview of the Concern:</strong></p>
     <ul>
       <li>Out-of-state partners provide essential support services for Wisconsin-based travel advisors.</li>
@@ -195,7 +228,7 @@
       The matter is in Wisconsin’s highest courts and could reach the U.S. Supreme Court.
       If this taxation approach prevails, it may affect other states and industries too.
     </p>
-
+    <!-- <hr> -->
     <h3>The Ask</h3>
     <p>
       As a Wisconsin travel advisor and concerned citizen, you are urged to:
@@ -205,9 +238,11 @@
       <li>Encourage them to oppose or amend this double taxation approach.</li>
       <li>Explain how double taxation threatens your business and Wisconsin’s economy.</li>
     </ul>
+    <hr>
     <div style="display: flex; justify-content: center">
         <a class="cta-btn" href="lookup.html">Create Your Wisconsin Advocacy Kit</a>
     </div>
+    <hr>
 
     <!-- Meet Your Officials Section -->
     <div class="meet-officials">
