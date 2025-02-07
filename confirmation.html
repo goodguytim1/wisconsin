@@ -19,6 +19,18 @@
       background: #f9f9f9;
     }
 
+    /* Header styling */
+    header {
+      text-align: center;
+      padding: 20px;
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      /* margin-bottom: 20px; */
+    }
+    header img {
+      height: 50px;
+    }
+
     @media (max-width: 600px) {
       .official-card {
         width: 90%;
@@ -94,12 +106,88 @@
       margin-top: 25px;
     }
 
-    /* Footer */
+    /*Official Styling*/
+     /* Meet Your Officials Section */
+     .meet-officials {
+      margin-top: 40px;
+      text-align: center;
+      padding: 0 20px;
+    }
+    .meet-officials h2 {
+      margin-bottom: 20px;
+    }
+    .officials-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+    }
+    .official-card {
+      background: #fff;
+      width: 250px;
+      border-radius: 6px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      padding: 20px;
+      text-align: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+    
+    .official-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .official-card img {
+      width: 100%;
+      height: auto;
+      border-radius: 4px;
+      margin-bottom: 10px;
+    }
+    .official-card h3 {
+      margin-bottom: 8px;
+    }
+    .official-card p {
+      margin-bottom: 8px;
+      line-height: 1.4;
+    }
+    .official-card a {
+      color: #007BFF;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .official-card a:hover {
+      text-decoration: underline;
+    }
+
+    /* Social links styling */
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 6px;
+    }
+    .social-links a {
+      color: #555;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .social-links a:hover {
+      text-decoration: underline;
+    }
+
+    /* Footer styling */
     .footer {
       text-align: center;
       padding: 20px;
       background: #f0f0f0;
       margin-top: 30px;
+    }
+    .footer img {
+      height: 40px;
+      margin-bottom: 10px;
     }
     .footer p {
       margin-bottom: 0;
@@ -114,6 +202,12 @@
   </style>
 </head>
 <body>
+  <!-- Website Header with Logo -->
+  <header>
+    <a href="index.html">
+      <img src="StopTaxationLogo.png" alt="Stop Taxation Logo">
+    </a>
+  </header>
 
   <!-- Hero Section -->
   <section class="hero">
@@ -129,8 +223,7 @@
       <strong>Remember, this isn’t just about Wisconsin.</strong> Should we fail, we can expect nearly every other
       state in the Union to follow suit, effectively ending the home-based travel agent industry.
     </p>
-
-    
+    <p>
       To access the content, simply right-click the <code>advocacy_package.zip</code> file you just downloaded and 
       select <strong>“Extract All.”</strong> In the folder that’s created, you’ll find three text files and four 
       folders. This content is already customized with the correct names and contact information based on 
@@ -138,13 +231,12 @@
     </p>
     <!-- Insert the screenshot image here -->
     <p style="text-align:center; margin: 20px 0;">
-        <img 
-          src="Folder.png" 
-          alt="Screenshot of the extracted folder structure" 
-          style="max-width: 350px; border: 1px solid #ccc; border-radius: 4px;"
-        />
-      </p>
-    <p>
+      <img 
+        src="Folder.png" 
+        alt="Screenshot of the extracted folder structure" 
+        style="max-width: 350px; border: 1px solid #ccc; border-radius: 4px;"
+      />
+    </p>
     <p>
       In each of the four folders, you will see:
     </p>
@@ -172,10 +264,106 @@
     </p>
   </div>
 
-  <!-- Footer -->
-  <div class="footer">
-    <!-- <p>&copy; 2025 - Wisconsin Travel Advisors United</p> -->
+  <!-- Meet Your Officials Section -->
+  <div class="meet-officials">
+    <h2>Meet Your Officials</h2>
+    <div class="officials-grid">
+      
+      <!-- Senator Tammy Baldwin -->
+      <div class="official-card">
+        <img
+          src="https://images.axios.com/78fjBdDl19xARm6FsESBekuN5Gc=/784x0:4784x4000/1024x1024/2024/10/03/1727981361722.jpg"
+          alt="Senator Tammy Baldwin">
+        <h3>Senator Tammy Baldwin</h3>
+        <p>Phone: (202) 224-5653</p>
+        <p>
+          <a href="https://www.baldwin.senate.gov/contact/contact-tammy" target="_blank">
+            Contact Senator Baldwin
+          </a>
+        </p>
+        <div class="social-links">
+          <a href="https://www.facebook.com/senatortammybaldwin" target="_blank">
+            <img 
+              src="Facebook_Logo_Primary.png" 
+              style="width:30px; margin: 20px;" 
+              alt="Facebook Icon"
+              class="social-icon">
+          </a>
+          <a href="https://twitter.com/SenatorBaldwin" target="_blank">
+            <img 
+              src="logo-black.png" 
+              style="width:30px; margin: 20px;" 
+              alt="Twitter Icon"
+              class="social-icon">
+          </a>
+        </div>
+      </div>
+      
+      <!-- Senator Ron Johnson -->
+      <div class="official-card">
+        <img
+          src="https://media.npr.org/assets/img/2022/01/07/ap_21341819915536-0101681b4f17c6a43ff85183ed622aaf42f88ac3.jpg"
+          alt="Senator Ron Johnson">
+        <h3>Senator Ron Johnson</h3>
+        <p>Phone: (202) 224-5323</p>
+        <p>
+          <a href="https://www.ronjohnson.senate.gov/email-the-senator" target="_blank">
+            Contact Senator Johnson
+          </a>
+        </p>
+        <div class="social-links">
+          <a href="http://www.facebook.com/pages/Senator-Ron-Johnson/186181661410703" target="_blank">
+            <img 
+              src="Facebook_Logo_Primary.png" 
+              style="width:30px; margin: 20px;" 
+              alt="Facebook Icon"
+              class="social-icon">
+          </a>
+          <a href="http://twitter.com/SenRonJohnson" target="_blank">
+            <img 
+              src="logo-black.png" 
+              style="width:30px; margin: 20px;" 
+              alt="Twitter Icon"
+              class="social-icon">
+          </a>
+        </div>
+      </div>
+      <!-- Governor Tony Evers -->
+      <div style="flex: 0 100%; margin-left: 25%; margin-right: 25%;" class="official-card">
+        <img style="width: 100%"
+          src="https://www.wisconsin.edu/regents/wp-content/uploads/sites/54/2016/01/evers-e1453477319245.jpg"
+          alt="Governor Tony Evers">
+        <h3>Governor Tony Evers</h3>
+        <p>Phone: (608) 266-1212</p>
+        <p>
+          <a href="https://wi.accessgov.com/public/Forms/Page/governor/voice-an-opinion/0" target="_blank">
+            Contact Governor Evers
+          </a>
+        </p>
+        <div class="social-links">
+          <a href="https://www.facebook.com/governortonyevers" target="_blank">
+            <img 
+              src="Facebook_Logo_Primary.png" 
+              style="width:30px; margin: 20px;" 
+              alt="Facebook Icon"
+              class="social-icon">
+          </a>
+          <a href="https://twitter.com/govevers" target="_blank">
+            <img 
+              src="logo-black.png" 
+              style="width:30px; margin: 20px;" 
+              alt="Twitter Icon"
+              class="social-icon">
+          </a>
+        </div>
+      </div>
+    </div>
   </div>
 
+  <!-- Footer with Logo -->
+  <div class="footer">
+    <img src="StopTaxationLogo.png" alt="Stop Taxation Logo">
+    <!-- <p>&copy; 2025 - Wisconsin Travel Advisors United</p> -->
+  </div>
 </body>
 </html>

@@ -27,9 +27,20 @@
         gap: 10px;
       }
     }
+    /* Header styling */
+    header {
+      background: #fff;
+      padding: 10px 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    header img {
+      height: 50px;
+    }
+
     /* Hero section styling */
     .hero {
-      background: #333;
+      background: linear-gradient(90deg, #333, #555);
       color: #fff;
       text-align: center;
       padding: 60px 20px;
@@ -56,10 +67,6 @@
       transition: background 0.3s ease;
       background: linear-gradient(90deg, #007BFF, #0056b3);
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-    .hero {
-      /* background: #0056b3; */
-      background: linear-gradient(90deg, #333, #555);
     }
     .cta-btn:hover {
       background: #0056b3;
@@ -93,12 +100,11 @@
     }
     .container h3 {
       margin-top: 25px;
-      
     }
 
     /* Meet Your Officials Section */
     .meet-officials {
-      margin-top: 40px; /* spacing above the section */
+      margin-top: 40px;
       text-align: center;
       padding: 0 20px;
     }
@@ -129,7 +135,6 @@
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
       transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
-
     .official-card img {
       width: 100%;
       height: auto;
@@ -168,23 +173,26 @@
       text-decoration: underline;
     }
 
-    /* Footer */
+    /* Footer styling */
     .footer {
       text-align: center;
       padding: 20px;
       background: #f0f0f0;
       margin-top: 30px;
     }
+    .footer img {
+      height: 40px;
+      display: block;
+      margin: 0 auto 10px;
+    }
 
     .social-icon {
       transition: transform 0.2s ease;
     }
-
     .social-icon:hover {
       transform: scale(1.1);
       cursor: pointer;
     }
-
     hr {
       border: 0;
       height: 2px;
@@ -194,6 +202,13 @@
   </style>
 </head>
 <body>
+
+  <!-- Website Header with Logo -->
+  <header>
+    <a href="index.html">
+      <img src="StopTaxationLogo.png" alt="Stop Taxation Logo">
+    </a>
+  </header>
 
   <!-- Hero Section -->
   <section class="hero">
@@ -205,7 +220,6 @@
   <!-- Main Content Container -->
   <div class="container">
     <h2>Understanding the Legal / Taxation Issue</h2>
-    <!-- <hr> -->
     <p><strong>Overview of the Concern:</strong></p>
     <ul>
       <li>Out-of-state partners provide essential support services for Wisconsin-based travel advisors.</li>
@@ -229,7 +243,6 @@
       The matter is in Wisconsin’s highest courts and could reach the U.S. Supreme Court.
       If this taxation approach prevails, it may affect other states and industries too.
     </p>
-    <!-- <hr> -->
     <h3>The Ask</h3>
     <p>
       As a Wisconsin travel advisor and concerned citizen, you are urged to:
@@ -239,133 +252,19 @@
       <li>Encourage them to oppose or amend this double taxation approach.</li>
       <li>Explain how double taxation threatens your business and Wisconsin’s economy.</li>
     </ul>
-    <hr>
+    <!-- <hr> -->
     <div style="display: flex; justify-content: center">
-        <a class="cta-btn" href="lookup.html">Create Your Wisconsin Advocacy Kit</a>
+      <a class="cta-btn" href="lookup.html">Create Your Wisconsin Advocacy Kit</a>
     </div>
-    <hr>
+    <!-- <hr> -->
 
-    <!-- Meet Your Officials Section -->
-    <div class="meet-officials">
-      <h2>Meet Your Officials</h2>
-      <div class="officials-grid">
-
-        
-         <!-- Senator Tammy Baldwin -->
-         <div class="official-card">
-          <img
-            src="https://images.axios.com/78fjBdDl19xARm6FsESBekuN5Gc=/784x0:4784x4000/1024x1024/2024/10/03/1727981361722.jpg"
-            alt="Senator Tammy Baldwin">
-          <h3>Senator Tammy Baldwin</h3>
-          <p>Phone: (202) 224-5653</p>
-          <p>
-            <a
-              href="https://www.baldwin.senate.gov/contact/contact-tammy"
-              target="_blank">
-              Contact Senator Baldwin
-            </a>
-          </p>
-          <div class="social-links">
-            <a href="https://www.facebook.com/senatortammybaldwin" target="_blank">
-              <img 
-                src="Facebook_Logo_Primary.png" 
-                style="width:30px; margin: 20px;" 
-                alt="Facebook Icon"
-                class="social-icon"
-              />
-            </a>
-            
-            <a href="https://twitter.com/SenatorBaldwin" target="_blank">
-              <img 
-                src="logo-black.png" 
-                style="width:30px; margin: 20px;" 
-                alt="Twitter Icon"
-                class="social-icon"
-              />
-            </a>
-            
-          </div>
-        </div>
-        <!-- Senator Ron Johnson -->
-        <div class="official-card">
-          <img
-            src="https://media.npr.org/assets/img/2022/01/07/ap_21341819915536-0101681b4f17c6a43ff85183ed622aaf42f88ac3.jpg"
-            alt="Senator Ron Johnson">
-          <h3>Senator Ron Johnson</h3>
-          <p>Phone: (202) 224-5323</p>
-          <p>
-            <a
-              href="https://www.ronjohnson.senate.gov/email-the-senator"
-              target="_blank">
-              Contact Senator Johnson
-            </a>
-          </p>
-          <div class="social-links">
-            <a href="http://www.facebook.com/pages/Senator-Ron-Johnson/186181661410703" target="_blank">
-              <img 
-                src="Facebook_Logo_Primary.png" 
-                style="width:30px; margin: 20px;" 
-                alt="Facebook Icon"
-                class="social-icon"
-              />
-            </a>
-            
-            <a href="http://twitter.com/SenRonJohnson" target="_blank">
-              <img 
-                src="logo-black.png" 
-                style="width:30px; margin: 20px;" 
-                alt="Twitter Icon"
-                class="social-icon"
-              />
-            </a>
-            
-          </div>
-        </div>
-
-        <!-- Governor Tony Evers -->
-        <div style="flex: 0 100%; margin-left: 25%; margin-right: 25%;" class="official-card">
-          <img style="width: 100%"
-            src="https://www.wisconsin.edu/regents/wp-content/uploads/sites/54/2016/01/evers-e1453477319245.jpg"
-            alt="Governor Tony Evers">
-          <h3>Governor Tony Evers</h3>
-          <p>Phone: (608) 266-1212</p>
-          <p>
-            <a
-              href="https://wi.accessgov.com/public/Forms/Page/governor/voice-an-opinion/0"
-              target="_blank">
-              Contact Governor Evers
-            </a>
-          </p>
-          <div class="social-links">
-            <a href="https://www.facebook.com/governortonyevers" target="_blank">
-              <img 
-                src="Facebook_Logo_Primary.png" 
-                style="width:30px; margin: 20px;" 
-                alt="Facebook Icon"
-                class="social-icon"
-              />
-            </a>
-            
-            <a href="https://twitter.com/govevers" target="_blank">
-              <img 
-                src="logo-black.png" 
-                style="width:30px; margin: 20px;" 
-                alt="Twitter Icon"
-                class="social-icon"
-              />
-            </a>
-          </div>
-        </div>
-
-       
-
-      </div>
-    </div>
+    
 
   </div>
 
-  <!-- Footer -->
+  <!-- Footer with Logo -->
   <div class="footer">
+    <img src="StopTaxationLogo.png" alt="Stop Taxation Logo">
     <!-- <p>© 2025 - Wisconsin Travel Advisors United</p> -->
   </div>
 

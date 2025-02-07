@@ -18,6 +18,18 @@
       background: linear-gradient(135deg, #ece9e6, #ffffff);
       color: #333;
     }
+    
+    /* Header styling */
+    header {
+      text-align: center;
+      padding: 20px;
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+    header img {
+      height: 50px;
+    }
 
     /* Container wrapping the form */
     .container {
@@ -27,6 +39,7 @@
       border-radius: 8px;
       padding: 30px;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      position: relative;
     }
 
     /* Header text */
@@ -87,7 +100,7 @@
 
     /* Error highlighting on inputs */
     .input-error {
-      border-color: #d9534f !important; /* A subtle red color */
+      border-color: #d9534f !important;
     }
 
     /* Inline error messages */
@@ -99,6 +112,27 @@
       margin-top: 5px;
       border-radius: 4px;
       font-size: 0.9rem;
+      line-height: 1.4;
+    }
+
+    /* Legal disclaimer container */
+    .legal-container {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      background: #f9f9f9;
+      margin-top: 15px;
+    }
+    .legal-container input[type="checkbox"] {
+      margin-top: 3px;
+      flex-shrink: 0;
+    }
+    .legal-container label {
+      font-weight: normal;
+      cursor: pointer;
       line-height: 1.4;
     }
 
@@ -118,11 +152,18 @@
       background: #0056b3;
     }
 
-    /* Footer placeholder (if needed) */
+    /* Footer styling */
     .footer {
       text-align: center;
       margin-top: 40px;
       color: #888;
+      padding: 20px;
+      background: #fff;
+      box-shadow: 0 -2px 8px rgba(0,0,0,0.1);
+    }
+    .footer img {
+      height: 40px;
+      margin-bottom: 10px;
     }
     .footer p {
       margin-bottom: 6px;
@@ -138,9 +179,42 @@
         width: 100%;
       }
     }
+
+    /* Loading overlay styles */
+    #loadingOverlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.8);
+      display: none; /* Hidden by default */
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    .spinner {
+      border: 8px solid #f3f3f3;
+      border-top: 8px solid #007bff;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
   </style>
 </head>
 <body>
+
+  <!-- Website Header with Logo -->
+  <header>
+    <a href="index.html">
+      <img src="StopTaxationLogo.png" alt="Stop Taxation Logo">
+    </a>
+  </header>
 
   <div class="container">
     <h2>Create Your Wisconsin Advocacy Kit</h2>
@@ -149,7 +223,7 @@
       representatives, and the rest of the fields will personalize your letters/emails.
     </p>
 
-    <!-- We remove the traditional form action/method and replace with a custom onsubmit handler -->
+    <!-- Form with custom onsubmit handler -->
     <form onsubmit="handleFormSubmission(event)">
       <!-- PERSONAL ADDRESS -->
       <div>
@@ -161,7 +235,7 @@
           placeholder="123 Park St, Wausau, WI 54401"
           required
         />
-        <!-- Space for inline error messages -->
+        <!-- Inline error message -->
         <div id="addressError" class="inline-error" style="display: none;"></div>
       </div>
 
@@ -220,7 +294,7 @@
           />
           <label for="sameAddressCheckbox">Same as Personal Address</label>
         </div>
-        <!-- Space for inline error messages -->
+        <!-- Inline error message -->
         <div id="mailingAddressError" class="inline-error" style="display: none;"></div>
       </div>
 
@@ -286,15 +360,31 @@
         ></textarea>
       </div>
 
-      <p class="intro-text" style="color: red; margin-top: 0;">Only for use by Wisconsin based travel agents!</p>
+      <p class="intro-text" style="color: red; margin-top: 0;">
+        Only for use by Wisconsin based travel agents!
+      </p>
 
-      <!-- SUBMIT -->
+      <!-- LEGAL DISCLAIMER CHECKBOX (User-friendly layout) -->
+      <div class="legal-container">
+        <input
+          type="checkbox"
+          id="legalDisclaimer"
+          name="legalDisclaimer"
+          required
+        />
+        <label for="legalDisclaimer">
+          Your information will not be sold or shared commercially. It will only be used to validate the number and location of supporters, contact you with important updates, and you can unsubscribe at any time.
+        </label>
+      </div>
+
+      <!-- SUBMIT BUTTON -->
       <button type="submit">Generate My Advocacy Kit</button>
     </form>
+  </div>
 
-    <div class="footer">
-      <!-- Optional footer text or links can go here -->
-    </div>
+  <!-- Loading overlay with spinner -->
+  <div id="loadingOverlay">
+    <div class="spinner"></div>
   </div>
 
   <script>
@@ -311,19 +401,18 @@
       if (sameAddressCheck.checked) {
         // Copy current personal address
         businessAddress.value = personalAddress.value;
-        // Disable the field so user can't type into it
+        // Disable the field so the user can't type into it
         businessAddress.disabled = true;
-        // Watch for changes on personal address and sync them
+        // Sync changes from personal address to business address
         personalAddress.addEventListener('input', syncAddresses);
       } else {
-        // Uncheck scenario
         personalAddress.removeEventListener('input', syncAddresses);
         businessAddress.value = '';
         businessAddress.disabled = false;
       }
     }
 
-    // Whenever personal address changes, keep business address in sync
+    // Sync personal address to business address when using same address option
     function syncAddresses() {
       const personalAddress = document.getElementById('address');
       const businessAddress = document.getElementById('mailingAddress');
@@ -332,16 +421,13 @@
 
     /*
       showError(field, label, errorField, errorMessage):
-        - Adds .input-error to the field
-        - Adds .label-error to the label
-        - Shows the inline error message in errorField
-        - Adds an asterisk to label text
-        - scrolls into view
+        - Adds error styling to the field and label,
+        - Displays the inline error message,
+        - Scrolls the error into view.
     */
     function showError(field, label, errorField, errorMessage) {
       field.classList.add('input-error');
       label.classList.add('label-error');
-      // Append an asterisk to the label if not already there
       if (!label.innerText.endsWith('*')) {
         label.innerText += ' *';
       }
@@ -349,30 +435,24 @@
       errorField.innerText = errorMessage;
     }
 
-    // Clears the error styling/messages if previously set
+    // Clear error styling/messages
     function clearError(field, label, errorField, originalLabelText) {
       field.classList.remove('input-error');
       label.classList.remove('label-error');
-      label.innerText = originalLabelText; // revert label text
+      label.innerText = originalLabelText;
       errorField.style.display = 'none';
       errorField.innerText = '';
     }
 
     /*
       validateAddress(field, labelElem, errorElem, labelText):
-        - Tries to match the field's value against addressRegex.
-        - Returns:
-           * "" (empty string) if valid
-           * An error message if invalid
-        - No more final "alert" pop-ups, everything is inline now.
+        Validates the address format.
     */
     function validateAddress(field, labelElem, errorElem, labelText) {
       const value = field.value.trim();
       const match = value.match(addressRegex);
-
       const subErrors = [];
 
-      // Validate structure of the address
       if (!match) {
         subErrors.push("Ensure the address includes street, city, state (WI), and ZIP code.");
         if ((value.match(/,/g) || []).length < 2) {
@@ -390,12 +470,10 @@
         if (state !== "WI") subErrors.push("The state must be Wisconsin (WI) to participate.");
       }
 
-      // If there are errors, return detailed message
       if (subErrors.length > 0) {
         return `Issues with ${labelText}:\n- ${subErrors.join("\n- ")}`;
       }
-
-      return ""; // Address is valid
+      return "";
     }
 
     // Main validation function
@@ -410,80 +488,56 @@
       const businessAddressError = document.getElementById('mailingAddressError');
       const businessLabelText = "Business Mailing Address";
 
-      // Clear old errors first
       clearError(personalAddressField, personalAddressLabel, personalAddressError, personalLabelText);
       clearError(businessAddressField, businessAddressLabel, businessAddressError, businessLabelText);
 
-      // Check personal address
-      let personalErrorMsg = validateAddress(
-        personalAddressField,
-        personalAddressLabel,
-        personalAddressError,
-        personalLabelText
-      );
-
-      // If business address is disabled, it has the same text as personal
-      // so if personal is invalid, business is effectively invalid too
+      let personalErrorMsg = validateAddress(personalAddressField, personalAddressLabel, personalAddressError, personalLabelText);
       let businessErrorMsg = "";
       if (businessAddressField.disabled) {
         businessErrorMsg = personalErrorMsg
           ? "Because your business address is the same as your personal address, you must fix that address first."
           : "";
       } else {
-        // Validate business address normally
-        businessErrorMsg = validateAddress(
-          businessAddressField,
-          businessAddressLabel,
-          businessAddressError,
-          businessLabelText
-        );
+        businessErrorMsg = validateAddress(businessAddressField, businessAddressLabel, businessAddressError, businessLabelText);
       }
 
-      // Decide how to display errors
-      const firstErrorField = personalErrorMsg
-        ? personalAddressField
-        : businessErrorMsg
-          ? businessAddressField
-          : null;
+      const firstErrorField = personalErrorMsg ? personalAddressField : businessErrorMsg ? businessAddressField : null;
 
       if (personalErrorMsg) {
-        showError(
-          personalAddressField,
-          personalAddressLabel,
-          personalAddressError,
-          personalErrorMsg
-        );
+        showError(personalAddressField, personalAddressLabel, personalAddressError, personalErrorMsg);
       }
       if (businessErrorMsg) {
-        showError(
-          businessAddressField,
-          businessAddressLabel,
-          businessAddressError,
-          businessErrorMsg
-        );
+        showError(businessAddressField, businessAddressLabel, businessAddressError, businessErrorMsg);
       }
 
-      // If there's an error, scroll to the first invalid field
-      if (firstErrorField) {
-        firstErrorField.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        // also focus for convenience
-        firstErrorField.focus();
-        return false; // prevent submission
-      }
-
-      return true;
-    }
-
-    // Handle form submission via fetch
-    async function handleFormSubmission(event) {
-      event.preventDefault(); // Prevent traditional form post
-
-      // Validate first
-      if (!validateForm()) {
+      // Check if the legal disclaimer checkbox is checked
+      const legalCheckbox = document.getElementById('legalDisclaimer');
+      if (!legalCheckbox.checked) {
+        legalCheckbox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        alert('Please agree to the legal disclaimer.');
+        legalCheckbox.focus();
         return false;
       }
 
-      // Construct data as JSON
+      if (firstErrorField) {
+        firstErrorField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        firstErrorField.focus();
+        return false;
+      }
+      return true;
+    }
+
+    // Handle form submission with loading overlay and async/await
+    async function handleFormSubmission(event) {
+      event.preventDefault();
+      if (!validateForm()) {
+        return false;
+      }
+      
+      // Show the loading overlay
+      const loadingOverlay = document.getElementById('loadingOverlay');
+      loadingOverlay.style.display = 'flex';
+
       const data = {
         address: document.getElementById('address').value.trim(),
         agentInfo: {
@@ -496,50 +550,39 @@
           yearsInBusiness: document.getElementById('yearsInBusiness').value.trim(),
           hostAgency: document.getElementById('yourHostAgency').value.trim(),
           personalStory: document.getElementById('personalStory').value.trim()
-        }
+        },
+        legalDisclaimer: document.getElementById('legalDisclaimer').checked
       };
 
-      // Send fetch POST request
-      await fetch('https://streaming1-a0f6be3ac16e.herokuapp.com/createAdvocacyKit', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-      })
-        .then(async (response) => {
-          if (!response.ok) {
-            const errorText = await response.text();
-            throw new Error(errorText || 'Request failed');
-          }
-          // The main success path is a ZIP file, so use blob() or arrayBuffer():
-          const blob = await response.blob();
-
-          // Then, trigger a download in the browser:
-          const url = URL.createObjectURL(blob);
-          const link = document.createElement('a');
-          link.href = url;
-          link.download = 'advocacy_package.zip';
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-          URL.revokeObjectURL(url);
-
-          // Optionally, redirect or show a success message
-          window.location.href = '/confirmation.html';
-        })
-        .then((result) => {
-          // Handle success - For now just alert or log
-          alert('Your Advocacy Kit has been generated successfully!');
-          console.log('Server response:', result);
-        })
-        .catch((error) => {
-          // Handle error
-          alert('An error occurred: ' + error.message);
-          console.error('Error:', error);
+      try {
+        const response = await fetch('https://streaming1-a0f6be3ac16e.herokuapp.com/createAdvocacyKit', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
         });
-
-        // window.location.href = "/confirmation.html"
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(errorText || 'Request failed');
+        }
+        const blob = await response.blob();
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'advocacy_package.zip';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+        loadingOverlay.style.display = 'none';
+        window.location.href = '/confirmation.html';
+      } catch (error) {
+        loadingOverlay.style.display = 'none';
+        alert('An error occurred: ' + error.message);
+        console.error('Error:', error);
+        return false;
+      }
     }
   </script>
 </body>
