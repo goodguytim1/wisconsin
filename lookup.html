@@ -58,6 +58,21 @@
       line-height: 1.4;
     }
 
+    /* Address container styling */
+    .address-container {
+      background-color: #f9f9f9;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    .address-container h3 {
+      margin-bottom: 15px;
+      color: #333;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 5px;
+    }
+
     /* The form */
     form {
       display: flex;
@@ -75,7 +90,7 @@
 
     /* Error label styling */
     .label-error {
-      color: #d9534f; /* red color for error labels */
+      color: #d9534f;
     }
 
     /* Inputs, selects, textareas */
@@ -188,7 +203,7 @@
       width: 100%;
       height: 100%;
       background: rgba(255, 255, 255, 0.8);
-      display: none; /* Hidden by default */
+      display: none;
       justify-content: center;
       align-items: center;
       z-index: 1000;
@@ -219,27 +234,77 @@
   <div class="container">
     <h2>Create Your Wisconsin Advocacy Kit</h2>
     <p class="intro-text">
-      Please fill in your details. We'll use your <strong>Wisconsin Street Address</strong> to look up your
-      representatives, and the rest of the fields will personalize your letters/emails.
+      Please fill in your details. We'll use your <strong>Wisconsin Street Address</strong> to look up your representatives, and the rest of the fields will personalize your letters/emails.
     </p>
 
     <!-- Form with custom onsubmit handler -->
     <form onsubmit="handleFormSubmission(event)">
-      <!-- PERSONAL ADDRESS -->
-      <div>
-        <label for="address" id="addressLabel">Wisconsin Street Address</label>
-        <input
-          type="text"
-          id="address"
-          name="address"
-          placeholder="123 Park St, Wausau, WI 54401"
-          required
-        />
-        <!-- Inline error message -->
-        <div id="addressError" class="inline-error" style="display: none;"></div>
+      
+      <!-- Personal Address Group -->
+      <div class="address-container">
+        <h3>Personal Address</h3>
+        <div>
+          <label for="streetAddress" id="streetAddressLabel">Street Address</label>
+          <input
+            type="text"
+            id="streetAddress"
+            name="streetAddress"
+            placeholder="123 Park St"
+            required
+          />
+          <div id="streetAddressError" class="inline-error" style="display: none;"></div>
+        </div>
+        <div>
+          <label for="zip" id="zipLabel">ZIP Code</label>
+          <input
+            type="text"
+            id="zip"
+            name="zip"
+            placeholder="54401"
+            required
+          />
+          <div id="zipError" class="inline-error" style="display: none;"></div>
+        </div>
       </div>
 
-      <!-- NAME -->
+      <!-- Business Mailing Address Group -->
+      <div class="address-container">
+        <h3>Business Mailing Address</h3>
+        <div>
+          <label for="businessStreetAddress" id="businessStreetAddressLabel">Business Street Address</label>
+          <input
+            type="text"
+            id="businessStreetAddress"
+            name="agentInfo[businessStreetAddress]"
+            placeholder="123 Main St"
+            required
+          />
+          <div id="businessStreetAddressError" class="inline-error" style="display: none;"></div>
+        </div>
+        <div>
+          <label for="businessZip" id="businessZipLabel">Business ZIP Code</label>
+          <input
+            type="text"
+            id="businessZip"
+            name="agentInfo[businessZip]"
+            placeholder="12345"
+            required
+          />
+          <div id="businessZipError" class="inline-error" style="display: none;"></div>
+        </div>
+        <!-- Same as Personal Address Checkbox -->
+        <div style="margin-top: 8px;">
+          <input
+            type="checkbox"
+            id="sameAddressCheckbox"
+            name="sameAddressCheckbox"
+            onclick="toggleSameAddress()"
+          />
+          <label for="sameAddressCheckbox">Same as Personal Address</label>
+        </div>
+      </div>
+
+      <!-- Other Fields -->
       <div>
         <label for="name">Your Full Name</label>
         <input
@@ -251,7 +316,6 @@
         />
       </div>
 
-      <!-- BUSINESS TITLE -->
       <div>
         <label for="businessTitle">Business Title</label>
         <input
@@ -263,7 +327,6 @@
         />
       </div>
 
-      <!-- BUSINESS NAME -->
       <div>
         <label for="businessName">Business Name</label>
         <input
@@ -274,31 +337,6 @@
         />
       </div>
 
-      <!-- BUSINESS MAILING ADDRESS -->
-      <div>
-        <label for="mailingAddress" id="mailingAddressLabel">Business Mailing Address</label>
-        <input
-          type="text"
-          id="mailingAddress"
-          name="agentInfo[mailingAddress]"
-          placeholder="123 Main St, City, ST 12345"
-          required
-        />
-        <!-- CHECKBOX FOR SAME ADDRESS -->
-        <div style="margin-top: 8px;">
-          <input
-            type="checkbox"
-            id="sameAddressCheckbox"
-            name="sameAddressCheckbox"
-            onclick="toggleSameAddress()"
-          />
-          <label for="sameAddressCheckbox">Same as Personal Address</label>
-        </div>
-        <!-- Inline error message -->
-        <div id="mailingAddressError" class="inline-error" style="display: none;"></div>
-      </div>
-
-      <!-- EMAIL -->
       <div>
         <label for="email">Email</label>
         <input
@@ -310,7 +348,6 @@
         />
       </div>
 
-      <!-- PHONE -->
       <div>
         <label for="phone">Phone</label>
         <input
@@ -322,7 +359,6 @@
         />
       </div>
 
-      <!-- YEARS IN BUSINESS -->
       <div>
         <label for="yearsInBusiness">Years in Business</label>
         <input
@@ -336,7 +372,6 @@
         />
       </div>
 
-      <!-- HOST AGENCY -->
       <div>
         <label for="yourHostAgency">Host Agency</label>
         <select id="yourHostAgency" name="agentInfo[hostAgency]" required>
@@ -349,7 +384,6 @@
         </select>
       </div>
 
-      <!-- PERSONAL STORY -->
       <div>
         <label for="personalStory">Personal Impact Statement</label>
         <textarea
@@ -364,7 +398,6 @@
         Only for use by Wisconsin based travel agents!
       </p>
 
-      <!-- LEGAL DISCLAIMER CHECKBOX (User-friendly layout) -->
       <div class="legal-container">
         <input
           type="checkbox"
@@ -377,7 +410,6 @@
         </label>
       </div>
 
-      <!-- SUBMIT BUTTON -->
       <button type="submit">Generate My Advocacy Kit</button>
     </form>
   </div>
@@ -388,146 +420,113 @@
   </div>
 
   <script>
-    // Regex for capturing groups: street, city, state, zip
-    const addressRegex =
-      /^(?<street>[^,]+),\s*(?<city>[^,]+),\s*(?<state>[A-Za-z]{2})\s+(?<zip>\d{5})$/;
+    /* --- Personal Address Validation --- */
+    function validateStreetAddress() {
+      const streetField = document.getElementById('streetAddress');
+      const streetError = document.getElementById('streetAddressError');
+      if (streetField.value.trim() === "") {
+        streetError.style.display = 'block';
+        streetError.innerText = "Street address is required.";
+        return false;
+      } else {
+        streetError.style.display = 'none';
+        return true;
+      }
+    }
 
-    // Toggle checkbox for same address
+    function validateZip() {
+      const zipField = document.getElementById('zip');
+      const zipError = document.getElementById('zipError');
+      const zipValue = zipField.value.trim();
+      if (!/^\d{5}$/.test(zipValue)) {
+        zipError.style.display = 'block';
+        zipError.innerText = "ZIP code must be 5 digits.";
+        return false;
+      } else {
+        zipError.style.display = 'none';
+        return true;
+      }
+    }
+
+    /* --- Business Mailing Address Validation --- */
+    function validateBusinessStreetAddress() {
+      const field = document.getElementById('businessStreetAddress');
+      const errorElem = document.getElementById('businessStreetAddressError');
+      if (field.value.trim() === "") {
+        errorElem.style.display = 'block';
+        errorElem.innerText = "Business street address is required.";
+        return false;
+      } else {
+        errorElem.style.display = 'none';
+        return true;
+      }
+    }
+
+    function validateBusinessZip() {
+      const field = document.getElementById('businessZip');
+      const errorElem = document.getElementById('businessZipError');
+      const value = field.value.trim();
+      if (!/^\d{5}$/.test(value)) {
+        errorElem.style.display = 'block';
+        errorElem.innerText = "Business ZIP code must be 5 digits.";
+        return false;
+      } else {
+        errorElem.style.display = 'none';
+        return true;
+      }
+    }
+
+    /* --- Same as Personal Address Toggle --- */
     function toggleSameAddress() {
-      const personalAddress = document.getElementById('address');
-      const businessAddress = document.getElementById('mailingAddress');
+      const personalStreet = document.getElementById('streetAddress');
+      const personalZip = document.getElementById('zip');
+      const businessStreet = document.getElementById('businessStreetAddress');
+      const businessZip = document.getElementById('businessZip');
       const sameAddressCheck = document.getElementById('sameAddressCheckbox');
 
       if (sameAddressCheck.checked) {
-        // Copy current personal address
-        businessAddress.value = personalAddress.value;
-        // Disable the field so the user can't type into it
-        businessAddress.disabled = true;
-        // Sync changes from personal address to business address
-        personalAddress.addEventListener('input', syncAddresses);
+        businessStreet.value = personalStreet.value.trim();
+        businessZip.value = personalZip.value.trim();
+        businessStreet.disabled = true;
+        businessZip.disabled = true;
+        personalStreet.addEventListener('input', syncBusinessAddress);
+        personalZip.addEventListener('input', syncBusinessAddress);
       } else {
-        personalAddress.removeEventListener('input', syncAddresses);
-        businessAddress.value = '';
-        businessAddress.disabled = false;
+        personalStreet.removeEventListener('input', syncBusinessAddress);
+        personalZip.removeEventListener('input', syncBusinessAddress);
+        businessStreet.value = "";
+        businessZip.value = "";
+        businessStreet.disabled = false;
+        businessZip.disabled = false;
       }
     }
 
-    // Sync personal address to business address when using same address option
-    function syncAddresses() {
-      const personalAddress = document.getElementById('address');
-      const businessAddress = document.getElementById('mailingAddress');
-      businessAddress.value = personalAddress.value;
+    function syncBusinessAddress() {
+      const personalStreet = document.getElementById('streetAddress');
+      const personalZip = document.getElementById('zip');
+      const businessStreet = document.getElementById('businessStreetAddress');
+      const businessZip = document.getElementById('businessZip');
+      businessStreet.value = personalStreet.value.trim();
+      businessZip.value = personalZip.value.trim();
     }
 
-    /*
-      showError(field, label, errorField, errorMessage):
-        - Adds error styling to the field and label,
-        - Displays the inline error message,
-        - Scrolls the error into view.
-    */
-    function showError(field, label, errorField, errorMessage) {
-      field.classList.add('input-error');
-      label.classList.add('label-error');
-      if (!label.innerText.endsWith('*')) {
-        label.innerText += ' *';
-      }
-      errorField.style.display = 'block';
-      errorField.innerText = errorMessage;
-    }
-
-    // Clear error styling/messages
-    function clearError(field, label, errorField, originalLabelText) {
-      field.classList.remove('input-error');
-      label.classList.remove('label-error');
-      label.innerText = originalLabelText;
-      errorField.style.display = 'none';
-      errorField.innerText = '';
-    }
-
-    /*
-      validateAddress(field, labelElem, errorElem, labelText):
-        Validates the address format.
-    */
-    function validateAddress(field, labelElem, errorElem, labelText) {
-      const value = field.value.trim();
-      const match = value.match(addressRegex);
-      const subErrors = [];
-
-      if (!match) {
-        subErrors.push("Ensure the address includes street, city, state (WI), and ZIP code.");
-        if ((value.match(/,/g) || []).length < 2) {
-          subErrors.push("Address must have commas separating street, city, and state.");
-        }
-        if (!/\d{5}$/.test(value)) {
-          subErrors.push("A 5-digit ZIP code is required.");
-        }
-      } else {
-        const { street, city, state, zip } = match.groups;
-        if (!street) subErrors.push("Street is missing.");
-        if (!city) subErrors.push("City is missing.");
-        if (!state) subErrors.push("State code (e.g., WI) is missing.");
-        if (!zip) subErrors.push("ZIP code (5 digits) is missing.");
-        if (state !== "WI") subErrors.push("The state must be Wisconsin (WI) to participate.");
-      }
-
-      if (subErrors.length > 0) {
-        return `Issues with ${labelText}:\n- ${subErrors.join("\n- ")}`;
-      }
-      return "";
-    }
-
-    // Main validation function
+    /* --- Main Form Validation --- */
     function validateForm() {
-      const personalAddressField = document.getElementById('address');
-      const personalAddressLabel = document.getElementById('addressLabel');
-      const personalAddressError = document.getElementById('addressError');
-      const personalLabelText = "Wisconsin Street Address";
-
-      const businessAddressField = document.getElementById('mailingAddress');
-      const businessAddressLabel = document.getElementById('mailingAddressLabel');
-      const businessAddressError = document.getElementById('mailingAddressError');
-      const businessLabelText = "Business Mailing Address";
-
-      clearError(personalAddressField, personalAddressLabel, personalAddressError, personalLabelText);
-      clearError(businessAddressField, businessAddressLabel, businessAddressError, businessLabelText);
-
-      let personalErrorMsg = validateAddress(personalAddressField, personalAddressLabel, personalAddressError, personalLabelText);
-      let businessErrorMsg = "";
-      if (businessAddressField.disabled) {
-        businessErrorMsg = personalErrorMsg
-          ? "Because your business address is the same as your personal address, you must fix that address first."
-          : "";
-      } else {
-        businessErrorMsg = validateAddress(businessAddressField, businessAddressLabel, businessAddressError, businessLabelText);
-      }
-
-      const firstErrorField = personalErrorMsg ? personalAddressField : businessErrorMsg ? businessAddressField : null;
-
-      if (personalErrorMsg) {
-        showError(personalAddressField, personalAddressLabel, personalAddressError, personalErrorMsg);
-      }
-      if (businessErrorMsg) {
-        showError(businessAddressField, businessAddressLabel, businessAddressError, businessErrorMsg);
-      }
-
-      // Check if the legal disclaimer checkbox is checked
+      const isPersonalStreetValid = validateStreetAddress();
+      const isPersonalZipValid = validateZip();
+      const isBusinessStreetValid = validateBusinessStreetAddress();
+      const isBusinessZipValid = validateBusinessZip();
       const legalCheckbox = document.getElementById('legalDisclaimer');
+
       if (!legalCheckbox.checked) {
-        legalCheckbox.scrollIntoView({ behavior: 'smooth', block: 'center' });
         alert('Please agree to the legal disclaimer.');
         legalCheckbox.focus();
         return false;
       }
-
-      if (firstErrorField) {
-        firstErrorField.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        firstErrorField.focus();
-        return false;
-      }
-      return true;
+      return isPersonalStreetValid && isPersonalZipValid && isBusinessStreetValid && isBusinessZipValid;
     }
 
-    // Handle form submission with loading overlay and async/await
+    /* --- Handle Form Submission --- */
     async function handleFormSubmission(event) {
       event.preventDefault();
       if (!validateForm()) {
@@ -539,12 +538,14 @@
       loadingOverlay.style.display = 'flex';
 
       const data = {
-        address: document.getElementById('address').value.trim(),
+        streetAddress: document.getElementById('streetAddress').value.trim(),
+        zip: document.getElementById('zip').value.trim(),
         agentInfo: {
           name: document.getElementById('name').value.trim(),
           businessTitle: document.getElementById('businessTitle').value.trim(),
           businessName: document.getElementById('businessName').value.trim(),
-          mailingAddress: document.getElementById('mailingAddress').value.trim(),
+          businessStreetAddress: document.getElementById('businessStreetAddress').value.trim(),
+          businessZip: document.getElementById('businessZip').value.trim(),
           email: document.getElementById('email').value.trim(),
           phone: document.getElementById('phone').value.trim(),
           yearsInBusiness: document.getElementById('yearsInBusiness').value.trim(),
