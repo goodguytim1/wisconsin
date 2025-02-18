@@ -269,7 +269,20 @@
 
       <!-- Business Mailing Address Group -->
       <div class="address-container">
-        <h3>Business Mailing Address</h3>
+        <h3>Business Mailing Address
+
+          
+        </h3>
+        <!-- Same as Personal Address Checkbox -->
+        <div style="margin-top: 8px;">
+          <input
+            type="checkbox"
+            id="sameAddressCheckbox"
+            name="sameAddressCheckbox"
+            onclick="toggleSameAddress()"
+          />
+          <label for="sameAddressCheckbox">Same as Personal Address</label>
+        </div>
         <div>
           <label for="businessStreetAddress" id="businessStreetAddressLabel">Business Street Address</label>
           <input
@@ -292,16 +305,7 @@
           />
           <div id="businessZipError" class="inline-error" style="display: none;"></div>
         </div>
-        <!-- Same as Personal Address Checkbox -->
-        <div style="margin-top: 8px;">
-          <input
-            type="checkbox"
-            id="sameAddressCheckbox"
-            name="sameAddressCheckbox"
-            onclick="toggleSameAddress()"
-          />
-          <label for="sameAddressCheckbox">Same as Personal Address</label>
-        </div>
+        
       </div>
 
       <!-- Other Fields -->
@@ -374,14 +378,14 @@
 
       <div>
         <label for="yourHostAgency">Host Agency</label>
-        <select id="yourHostAgency" name="agentInfo[hostAgency]" required>
-          <option value="">-- Select --</option>
-          <option value="Outside Agents">Outside Agents</option>
-          <option value="KHM Travel">KHM Travel</option>
-          <option value="Nexion">Nexion</option>
-          <option value="Other">Other</option>
-          <option value="Independent">No Host - Independent</option>
-        </select>
+        <input
+          type="text"
+          id="yourHostAgency"
+          name="agentInfo[hostAgency]"
+          placeholder="None"
+          value="None"
+          required
+        />
       </div>
 
       <div>
@@ -406,8 +410,9 @@
           required
         />
         <label for="legalDisclaimer">
-          Your information will not be sold or shared commercially. It will only be used to validate the number and location of supporters, contact you with important updates, and you can unsubscribe at any time.
+          By submitting this form, you agree that your information will not be sold or shared commercially and will only be used to validate the number and location of supporters, contact you with important updates, and allow you to unsubscribe at any time. Unless otherwise specified, your information will not be shared with any entity other than your host. Some details, such as the number of supporters and their main concerns, may be aggregated and stripped of any personally identifiable information. Please note that once submitted, your information cannot be deleted, and California residents waive their rights under the California Consumer Privacy Act (CCPA).
         </label>
+        
       </div>
 
       <button type="submit">Generate My Advocacy Kit</button>
